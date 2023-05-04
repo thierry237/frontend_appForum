@@ -1,0 +1,37 @@
+<h4 *ngIf="message_error">{{message_error}} <a [routerLink]="['/login']">connexion</a></h4>
+<div class="container mt-5" *ngIf="!message_error">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h5 class="text-center mb-4">Ajouter un cours</h5>
+                    <form name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit()">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nom du cours</label>
+                            <input type="text" name="name" class="form-control" id="name" [(ngModel)]="course.name"
+                                #name="ngModel" (keyup)="clearUsernameError()" required>
+                            <div class="form_errors" *ngIf="message_error">Ce cours exite déjà</div>
+                            <div class="form_errors" *ngIf="name.errors && f.submitted">nom requis</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">description</label>
+                            <textarea name="description" class="form-control" id="description"
+                                [(ngModel)]="course.description" #description="ngModel" required></textarea>
+                            <div class="form_errors" *ngIf="description.errors && f.submitted">description requise</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-40 mb-3 me-2">Ajouter</button>
+                        <button type="button" [routerLink]="['/course']"
+                            class="btn btn-danger w-40 mb-3 ml-3  ">annuler</button>
+                        <hr class="my-4">
+
+                        <!-- Message de confirmation d'inscription -->
+                        <div class="alert alert-success mt-3" *ngIf="ajoutValide">
+                            cours ajouté !
+                            <a [routerLink]="['/course']" class="alert-link">Retour à la liste des cours</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

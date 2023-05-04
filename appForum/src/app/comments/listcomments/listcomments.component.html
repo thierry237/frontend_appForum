@@ -1,0 +1,21 @@
+<div class="container">
+    <h2>Commentaires</h2>
+    <form [formGroup]="commentForm">
+        <div class="form-group">
+            <label for="name">Nom:</label>
+            <input type="text" class="form-control" formControlName="name" id="name">
+        </div>
+        <div class="form-group">
+            <label for="comment">Commentaire:</label>
+            <textarea class="form-control" formControlName="comment" id="comment"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" (click)="addComment()">Ajouter un commentaire</button>
+    </form>
+    <hr>
+    <div class="comments-container">
+        <div *ngFor="let comment of comments" class="comment">
+            <div class="comment-name">{{ comment.comment }}</div>
+            <!-- <div class="comment-text">{{ comment.comment }}</div> -->
+        </div>
+    </div>
+</div>

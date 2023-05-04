@@ -1,0 +1,40 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">{{title}}</h2>
+                    <form name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit()">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Adresse e-mail</label>
+                            <input type="email" name="email" class="form-control" id="email" [(ngModel)]="form.email"
+                                #email="ngModel" placeholder="thierry@gmail.com" required>
+                            <div class="form_errors" *ngIf="email_error && f.submitted">email n'exite pas </div>
+                            <div class="form_errors" *ngIf="email.errors && f.submitted">adresse e-mail requise</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Mot de passe</label>
+                            <input type="password" name="password" class="form-control" id="password"
+                                [(ngModel)]="form.password" #password="ngModel" placeholder="min 3 et max 15" required
+                                minlength="3" maxlength="15" (keyup)="clearPasswordError()">
+                            <div class="form_errors" *ngIf="password_error && f.submitted">mot de passe incorrect</div>
+                            <div class="form_errors" *ngIf="password.errors && f.submitted ">
+                                <div class="form_errors" *ngIf="password.errors['required']"> mot de passe requis</div>
+                                <div class="form_errors"
+                                    *ngIf="password.errors['minlength'] || password.errors['maxlength']">
+                                    min 4 et max 8 </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mb-3">Connexion</button>
+                        <div class="d-flex justify-content-center">
+                            <a href="#" class="link-primary">Mot de passe oublié ?</a>
+                        </div>
+                        <hr class="my-4">
+                        <p class="text-center">Nouveau sur appForum ?</p>
+                        <a [routerLink]="['/register']" class="btn btn-outline-primary w-100">Créer un compte</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+<h4 *ngIf="message_error">{{message_error}} <a [routerLink]="['/login']">connexion</a></h4>
+<section class="container" *ngIf="!message_error">
+    <h4>Bienvenue {{username}}!</h4>
+    <form class="d-flex justify-content-between align-items-center mb-3 mt-3  ">
+        <div class="input-group mr-10">
+            <input type="text" class="form-control me-2" placeholder="Recherche...">
+            <div class="input-group-append ">
+                <button class="btn btn-primary me-2 btn-sm" type="button">Rechercher</button>
+            </div>
+            <div class="input-group-append " *ngIf="isAdmin">
+                <button [routerLink]="['add']" class="btn btn-primary btn-sm" type="button"> ajouter Cours</button>
+            </div>
+        </div>
+
+    </form>
+    <div class="card-deck row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-5 g-3">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let course of courses">
+            <div class="card mb-4 h-100">
+                <!-- <img src="https://aup.imgix.net/user_images/57875/cours-particuliers-soutien-scolaire-universitaire-garanti-examens-1543336101.jpg?ch=Width,DPR&fit=crop&crop=faces&auto=format,compress&w=300&h=300&dpr=2.625&frame=1" -->
+                <!-- class="card-img-top" alt="..."> -->
+                <div class="card-body">
+                    <h5 class="card-title">{{course.name}}</h5>
+                    <p class="card-text">{{course.description}}</p>
+                    <p class="card-text">{{course.createdAt}}</p>
+                    <button *ngIf="course.idCourse !== undefined" (click)="onSelect(course.idCourse)"
+                        class="btn btn-primary btn-sm">accéder</button>
+                </div>
+                <div class="card-footer d-flex justify-content-between align-items-center " *ngIf="isAdmin">
+                    <button *ngIf="course.idCourse !== undefined" (click)="deleteCourse(course.idCourse)"
+                        class="btn btn-secondary me-2 btn-sm btn-danger">supprimer</button>
+                    <button [routerLink]="['edit', course.idCourse]"
+                        class="btn btn-secondary btn-sm btn-success">modifier</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
