@@ -7,7 +7,6 @@ import { CourseService } from 'src/app/_services/course.service';
 import { PostService } from 'src/app/_services/post.service';
 import { UserService } from 'src/app/_services/user.service';
 import { IUser } from 'src/app/_interfaces/user';
-import { Observable } from 'rxjs';
 import { TokenService } from 'src/app/_services/token.service';
 
 @Component({
@@ -61,6 +60,7 @@ export class ListPostComponent implements OnInit {
                 this.userservice.getUserById(post.idUser).subscribe(
                   user => {
                     this.postsWithUser.push({ ...post, user });
+                    this.OrderMessage()
                   }
                 )
               }
@@ -104,6 +104,7 @@ export class ListPostComponent implements OnInit {
                   this.userservice.getUserById(post.idUser).subscribe(
                     user => {
                       this.postsWithUser.push({ ...post, user });
+                      this.OrderMessage()
                     }
                   )
                 }
@@ -137,6 +138,22 @@ export class ListPostComponent implements OnInit {
 
   onComment(idPost: number) {
     this.router.navigate(['/comment'], { queryParams: { idPost: idPost } });
+  }
+
+  OrderMessage() {
+    this.postsWithUser.sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      if (dateA > dateB) {
+        return -1;
+      } else if (dateA < dateB) {
+        return 1;
+      } else {
+        const timeA = dateA.toLocaleTimeString();
+        const timeB = dateB.toLocaleTimeString();
+        return timeB.localeCompare(timeA);
+      }
+    });
   }
 }
 

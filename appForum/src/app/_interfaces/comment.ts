@@ -4,4 +4,5 @@ export interface IComment {
     like?: boolean,
     idUser?: number,
     idPost?: number
+    createdAt?: string
 }

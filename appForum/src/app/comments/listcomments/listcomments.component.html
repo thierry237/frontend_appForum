@@ -1,21 +1,35 @@
 <div class="container">
-    <h2>Commentaires</h2>
-    <form [formGroup]="commentForm">
+    <h2>{{ post.title }}</h2>
+    <h3>{{ post.message }}</h3>
+    <form [formGroup]="commentForm" (ngSubmit)="addComment()">
         <div class="form-group">
-            <label for="name">Nom:</label>
-            <input type="text" class="form-control" formControlName="name" id="name">
+            <label for="comment">Ajouter un commentaire:</label>
+            <textarea class="form-control" formControlName="comment" id="comment"
+                (keyup)="clearMessageComment()"></textarea>
+            <div *ngIf="commentForm.controls['comment'].invalid && commentForm.controls['comment'].touched"
+                class="alert alert-danger">Le commentaire est requis.</div>
         </div>
-        <div class="form-group">
-            <label for="comment">Commentaire:</label>
-            <textarea class="form-control" formControlName="comment" id="comment"></textarea>
+        <input type="hidden" formControlName="idPost" value="{{idPost}}">
+        <button type="submit" class="btn btn-primary mt-3" [disabled]="!commentForm.valid">Ajouter</button>
+        <div *ngIf="commentAdded" class="alert alert-success mt-3">
+            Le commentaire a été ajouté avec succès.
         </div>
-        <button type="submit" class="btn btn-primary" (click)="addComment()">Ajouter un commentaire</button>
+
     </form>
     <hr>
-    <div class="comments-container">
-        <div *ngFor="let comment of comments" class="comment">
-            <div class="comment-name">{{ comment.comment }}</div>
-            <!-- <div class="comment-text">{{ comment.comment }}</div> -->
+    <div class="row comments-container">
+        <div class="col-12">
+            <div class="card-deck">
+                <div *ngFor="let comment of commentsWithUser" class="card mt-3">
+                    <div class="card-body">
+                        <p class="card-text">{{ comment.comment }}</p>
+                        <p class="card-text"><small class="text-muted">{{ comment.user?.username}} | ajouté le {{
+                                comment.createdAt| date:'EEEE d MMMM y à HH:mm:ss':'fr-FR'
+                                }}</small></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <div>Nombre de commentaire(s) : {{ comments.length }}</div>
 </div>

@@ -7,7 +7,7 @@ import { DCommentsComponent } from './d-comments/d-comments.component';
 import { ListcommentsComponent } from './listcomments/listcomments.component';
 import { GetcommentsComponent } from './getcomments/getcomments.component';
 import { ECommentsComponent } from './e-comments/e-comments.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -21,7 +21,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     CommentsRoutingModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class CommentsModule { }

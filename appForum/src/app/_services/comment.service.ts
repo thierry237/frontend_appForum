@@ -8,6 +8,7 @@ import { IComment } from '../_interfaces/comment';
 })
 export class CommentService {
 
+
   baseUrl: string = 'http://localhost:8000'
   constructor(private http: HttpClient) { }
 
@@ -24,6 +25,6 @@ export class CommentService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     })
-    return this.http.post<any>(this.baseUrl + '/post/' + comment.idComment, comment, { "headers": headers })
+    return this.http.post<any>(this.baseUrl + '/comment', comment, { "headers": headers })
   }
 }
