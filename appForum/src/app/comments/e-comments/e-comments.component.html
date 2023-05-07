@@ -1,1 +1,30 @@
-<p>e-comments works!</p>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h5 class="text-center mb-4">Modifier le commentaire </h5>
+                    <form name="form" #f="ngForm" (ngSubmit)="f.form.valid && editComment()">
+                        <div class="mb-3">
+                            <label for="comment" class="form-label">Commentaire</label>
+                            <textarea name="comment" class="form-control" id="comment" [(ngModel)]="comments.comment"
+                                #comment="ngModel" rows="8" required></textarea>
+                            <div class="form_errors" *ngIf="comment.errors && f.submitted">Commentaire requis</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-40 mb-3 me-2"><i class="bi bi-plus-circle"></i>
+                            Valider</button>
+                        <button type="button" (click)="onReturnComment()" class="btn btn-danger w-40 mb-3 ml-3  "><i
+                                class="bi bi-x-circle-fill"></i> Annuler</button>
+                        <hr class="my-4">
+
+                        <!-- Message de confirmation de modification -->
+                        <div class="alert alert-success mt-3" *ngIf="modificationValide">
+                            Commentaire modifié !
+                            <a (click)="onReturnComment()" class="alert-link">Retour à la liste des commentaires</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

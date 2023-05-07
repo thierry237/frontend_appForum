@@ -15,7 +15,7 @@ import * as fr from '@angular/common/locales/fr';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
+    HttpClientModule
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
   bootstrap: [AppComponent]

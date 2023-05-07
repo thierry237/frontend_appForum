@@ -1,35 +1,66 @@
 <h4 *ngIf="message_error">{{message_error}} <a [routerLink]="['/login']">connexion</a></h4>
 <section class="container" *ngIf="!message_error">
-    <h4>Bienvenue {{username}}!</h4>
-    <form class="d-flex justify-content-between align-items-center mb-3 mt-3  ">
-        <div class="input-group mr-10">
-            <input type="text" class="form-control me-2" placeholder="Recherche...">
-            <div class="input-group-append ">
-                <button class="btn btn-primary me-2 btn-sm" type="button">Rechercher</button>
-            </div>
-            <div class="input-group-append " *ngIf="isAdmin">
-                <button [routerLink]="['add']" class="btn btn-primary btn-sm" type="button"> ajouter Cours</button>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand text-arial">AppForum</a>
+            <a class="navbar-brand text-arial"> </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item ">
+                        <a class="nav-link text-primary" (click)="homePage()"> <i
+                                class="bi bi-house-add-fill"></i>Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" [routerLink]="['/user']"> <i
+                                class="bi bi-person-lines-fill"></i>utilisateurs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" [routerLink]="['add']"> <i
+                                class="bi bi-plus-circle-fill"></i>Ajouter un
+                            cours</a>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0 mx-auto">
+                    <div class="d-flex">
+                        <div class="form-group mx-2">
+                            <input type="text" class="form-control" id="search- " placeholder="Recherche"
+                                name="searchCourse" [(ngModel)]="searchCourse" (ngModelChange)="onSearchChange()">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm mr-3" (click)="searchCourseAPI()"><i
+                                class="bi bi-search"></i></button>
+                    </div>
+                </form>
+                <div class="d-flex">
+                    <button class="btn btn-secondary me-2" (click)="editUser()"><i class="bi bi-person"></i>
+                        Profil</button>
+                    <button class="btn btn-danger" (click)="logoutUser()"><i class="bi bi-person-x-fill"></i></button>
+                </div>
             </div>
         </div>
-
-    </form>
+    </nav>
+    <h4 class="text-arial">Bienvenue {{username}}!</h4>
+    <hr>
     <div class="card-deck row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-5 g-3">
+        <h3 *ngIf="message">{{message}}</h3>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let course of courses">
             <div class="card mb-4 h-100">
-                <!-- <img src="https://aup.imgix.net/user_images/57875/cours-particuliers-soutien-scolaire-universitaire-garanti-examens-1543336101.jpg?ch=Width,DPR&fit=crop&crop=faces&auto=format,compress&w=300&h=300&dpr=2.625&frame=1" -->
-                <!-- class="card-img-top" alt="..."> -->
                 <div class="card-body">
                     <h5 class="card-title">{{course.name}}</h5>
                     <p class="card-text">{{course.description}}</p>
-                    <p class="card-text">{{course.createdAt}}</p>
+                    <p class="card-text"><small class="text-muted">Ajouté le {{course.createdAt | date: 'd MMMM y' :
+                            'fr-FR'}}</small></p>
                     <button *ngIf="course.idCourse !== undefined" (click)="onSelect(course.idCourse)"
-                        class="btn btn-primary btn-sm">accéder</button>
+                        class="btn btn-primary btn-sm"><i class="bi bi-eye-fill"></i> accéder</button>
                 </div>
                 <div class="card-footer d-flex justify-content-between align-items-center " *ngIf="isAdmin">
                     <button *ngIf="course.idCourse !== undefined" (click)="deleteCourse(course.idCourse)"
-                        class="btn btn-secondary me-2 btn-sm btn-danger">supprimer</button>
-                    <button [routerLink]="['edit', course.idCourse]"
-                        class="btn btn-secondary btn-sm btn-success">modifier</button>
+                        class="btn btn-secondary me-2 btn-sm btn-danger"><i class="bi bi-trash icon-sm"></i></button>
+                    <button [routerLink]="['edit', course.idCourse]" class="btn btn-secondary btn-sm"> <i
+                            class="bi bi-pencil-square icon-sm"></i></button>
                 </div>
             </div>
         </div>

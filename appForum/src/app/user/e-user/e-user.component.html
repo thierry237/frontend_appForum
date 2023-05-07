@@ -3,29 +3,28 @@
         <div class="col-md-5">
             <div class="card shadow-lg">
                 <div class="card-body p-5">
-                    <h2 class="text-center mb-4">{{title}}</h2>
-                    <h5 class="text-center mb-4">inscription</h5>
+                    <h2 class="text-center mb-4"></h2>
+                    <h5 class="text-center mb-4">modification du profil</h5>
                     <form name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit()">
                         <div class="mb-3">
                             <label for="lastname" class="form-label">Nom</label>
                             <input type="text" name="lastname" class="form-control" id="lastname"
-                                [(ngModel)]="form.lastname" #lastname="ngModel" placeholder="thierry" required>
+                                [(ngModel)]="user.lastname" #lastname="ngModel" placeholder="thierry" required>
                             <div class="form_errors" *ngIf="lastname.errors && f.submitted">nom requis</div>
                         </div>
                         <div class="mb-3">
                             <label for="firstname" class="form-label">Prénom</label>
                             <input type="text" name="firstname" class="form-control" id="firstname"
-                                [(ngModel)]="form.firstname" #firstname="ngModel" placeholder="joel" required>
+                                [(ngModel)]="user.firstname" #firstname="ngModel" required>
                             <div class="form_errors" *ngIf="firstname.errors && f.submitted">prénom requis</div>
                         </div>
                         <div class="mb-3">
                             <label for="username" class="form-label">Nom d'utilisateur</label>
                             <input type="text" name="username" class="form-control" id="username"
-                                [(ngModel)]="form.username" #username="ngModel" placeholder="thier@45" minlength="3"
-                                maxlength="15" (keyup)="clearUsernameError()" required>
-                            <div class="form_errors" *ngIf="username_error && f.submitted">
+                                [(ngModel)]="user.username" #username="ngModel" minlength="3" maxlength="15" required>
+                            <!-- <div class="form_errors" *ngIf="username_error && f.submitted">
                                 <div class="form_errors" *ngIf="username_error">{{username_error}}</div>
-                            </div>
+                            </div> -->
                             <div class="form_errors" *ngIf="username.errors && f.submitted ">
                                 <div class="form_errors" *ngIf="username.errors['required']"> username requis</div>
                                 <div class="form_errors"
@@ -35,17 +34,21 @@
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Adresse e-mail</label>
-                            <input type="email" name="email" class="form-control" id="email" [(ngModel)]="form.email"
-                                #email="ngModel" placeholder="thierry@gmail.com" (keyup)="clearEmailError()" required>
-                            <div class="form_errors" *ngIf="email_error && f.submitted">
+                            <input type="email" name="email" class="form-control" id="email" [(ngModel)]="user.email"
+                                #email="ngModel" placeholder="thierry@gmail.com" required>
+                            <!-- <div class="form_errors" *ngIf="email_error && f.submitted">
                                 <div class="form_errors" *ngIf="email_error">{{email_error}}</div>
-                            </div>
+                            </div> -->
                             <div class="form_errors" *ngIf="email.errors && f.submitted">email requis</div>
                         </div>
-                        <div class="mb-3">
+                        <div>voulez-vous modifier votre mot de passe?
+                            <input type="checkbox" (click)="changePassword()">
+                        </div>
+
+                        <div class="mb-3" *ngIf="newPassword">
                             <label for="password" class="form-label">Mot de passe</label>
                             <input type="password" name="password" class="form-control" id="password"
-                                [(ngModel)]="form.password" #password="ngModel" placeholder="min 3 et max 15" required
+                                [(ngModel)]="user.password" #password="ngModel" placeholder="min 3 et max 15" required
                                 minlength="4" maxlength="8">
                             <div class="form_errors" *ngIf="password.errors && f.submitted ">
                                 <div class="form_errors" *ngIf="password.errors['required']"> mot de passe requis</div>
@@ -54,13 +57,16 @@
                                     min 4 et max 8 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100 mb-3">S'incrire</button>
+                        <button type="submit" class="btn btn-primary w-40 mb-3 me-2"><i
+                                class="bi bi-plus-circle-fill"></i> modifié</button>
+                        <button type="button" class="btn btn-danger w-40 mb-3 ml-3 " [routerLink]="['/course']"><i
+                                class="bi bi-x-circle-fill"></i> annuler</button>
                         <hr class="my-4">
 
                         <!-- Message de confirmation d'inscription -->
-                        <div class="alert alert-success mt-3" *ngIf="inscriptionValide">
-                            Inscription réussie !
-                            <a [routerLink]="['/login']" class="alert-link">Retour à la page de connexion</a>
+                        <div class="alert alert-success mt-3" *ngIf="modificationValide">
+                            Modification réussie !
+                            <a [routerLink]="['/course']" class="alert-link">Retour à la page d'accueil</a>
                         </div>
                     </form>
                 </div>

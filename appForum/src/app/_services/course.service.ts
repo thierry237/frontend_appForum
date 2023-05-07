@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { ICourse, IListCourse } from '../_interfaces/course';
 
 @Injectable({
@@ -53,6 +53,17 @@ export class CourseService {
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     })
     return this.http.post<any>(`${this.baseUrl}/course`, course, { "headers": headers })
+  }
+
+  filterCourse(name: string): Observable<ICourse[]> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    })
+    const body = { name: name };
+    return this.http.post<ICourse[]>(`${this.baseUrl}/course/search`, body, { "headers": headers }).pipe(
+      map((courses: ICourse[]) => courses.filter(course => course.name.toLowerCase().startsWith(name.toLowerCase())))
+    )
   }
 
 }

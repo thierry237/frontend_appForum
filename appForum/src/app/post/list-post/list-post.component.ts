@@ -131,10 +131,6 @@ export class ListPostComponent implements OnInit {
     )
   }
 
-  getIdUser() {
-    const decodedToken = this.tokenservice._idUser();
-    console.log(decodedToken)
-  }
 
   onComment(idPost: number) {
     this.router.navigate(['/comment'], { queryParams: { idPost: idPost } });
@@ -154,6 +150,11 @@ export class ListPostComponent implements OnInit {
         return timeB.localeCompare(timeA);
       }
     });
+  }
+
+  logoutUser() {
+    this.tokenservice.logout();
+    this.router.navigate(['']);
   }
 }
 

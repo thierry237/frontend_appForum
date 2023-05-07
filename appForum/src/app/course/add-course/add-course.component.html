@@ -4,7 +4,7 @@
         <div class="col-md-5">
             <div class="card shadow-lg">
                 <div class="card-body p-5">
-                    <h5 class="text-center mb-4">Ajouter un cours</h5>
+                    <h5 class="text-center mb-4"><i class="bi bi-book-fill"></i> Ajouter un cours</h5>
                     <form name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit()">
                         <div class="mb-3">
                             <label for="name" class="form-label">Nom du cours</label>
@@ -16,12 +16,13 @@
                         <div class="mb-3">
                             <label for="description" class="form-label">description</label>
                             <textarea name="description" class="form-control" id="description"
-                                [(ngModel)]="course.description" #description="ngModel" required></textarea>
+                                [(ngModel)]="course.description" #description="ngModel" rows="6" required></textarea>
                             <div class="form_errors" *ngIf="description.errors && f.submitted">description requise</div>
                         </div>
-                        <button type="submit" class="btn btn-primary w-40 mb-3 me-2">Ajouter</button>
-                        <button type="button" [routerLink]="['/course']"
-                            class="btn btn-danger w-40 mb-3 ml-3  ">annuler</button>
+                        <button type="submit" class="btn btn-primary w-40 mb-3 me-2"><i
+                                class="bi bi-plus-circle-fill"></i> Ajouter</button>
+                        <button type="button" [routerLink]="['/course']" class="btn btn-danger w-40 mb-3 ml-3  "> <i
+                                class="bi bi-x-circle-fill"></i> Annuler</button>
                         <hr class="my-4">
 
                         <!-- Message de confirmation d'inscription -->

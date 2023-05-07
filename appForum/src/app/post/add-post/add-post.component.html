@@ -3,7 +3,7 @@
         <div class="col-md-5">
             <div class="card shadow-lg">
                 <div class="card-body p-5">
-                    <h5 class="text-center mb-4">Ajouter un post</h5>
+                    <h5 class="text-center mb-4"><i class="bi bi-sticky"></i> Ajouter un post</h5>
                     <form name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit()">
                         <div class="mb-3">
                             <label for="title" class="form-label">titre du post</label>
@@ -14,12 +14,13 @@
                         <div class="mb-3">
                             <label for="message" class="form-label">Question</label>
                             <textarea name="message" class="form-control" id="message" [(ngModel)]="post.message"
-                                #message="ngModel" required></textarea>
+                                #message="ngModel" rows="6" required></textarea>
                             <div class="form_errors" *ngIf="message.errors && f.submitted">contenu requis</div>
                         </div>
-                        <button type="submit" class="btn btn-primary w-40 mb-3 me-2">Ajouter</button>
-                        <button type="button" (click)="returnListPost()"
-                            class="btn btn-danger w-40 mb-3 ml-3  ">annuler</button>
+                        <button type="submit" class="btn btn-primary w-40 mb-3 me-2"><i
+                                class="bi bi-plus-circle-fill"></i> Ajouter</button>
+                        <button type="button" (click)="returnListPost()" class="btn btn-danger w-40 mb-3 ml-3  "><i
+                                class="bi bi-x-circle-fill"></i> annuler</button>
                         <hr class="my-4">
 
                         <!-- Message de confirmation d'inscription -->

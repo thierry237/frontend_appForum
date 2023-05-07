@@ -1,13 +1,15 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from './../../_services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, mergeMap } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BehaviorSubject, catchError, mergeMap, throwError } from 'rxjs';
 import { IComment } from 'src/app/_interfaces/comment';
 import { IPost } from 'src/app/_interfaces/post';
 import { IUser } from 'src/app/_interfaces/user';
 import { CommentService } from 'src/app/_services/comment.service';
 import { PostService } from 'src/app/_services/post.service';
+import { TokenService } from 'src/app/_services/token.service';
 
 
 @Component({
@@ -18,7 +20,10 @@ import { PostService } from 'src/app/_services/post.service';
 export class ListcommentsComponent implements OnInit {
   idPost: string | null = null;
   commentAdded: boolean = false;
+  isAdmin: boolean = false;
+  idUser !: number;
   commentsWithUser: any[] = [];
+
   user: IUser = {
     lastname: '',
     firstname: '',
@@ -42,8 +47,10 @@ export class ListcommentsComponent implements OnInit {
     private fb: FormBuilder,
     private activatedroute: ActivatedRoute,
     private commentservice: CommentService,
+    private tokenservice: TokenService,
     private postservice: PostService,
-    private userservice: UserService
+    private userservice: UserService,
+    private router: Router
   ) {
     this.commentForm = this.fb.group({
       comment: ['', Validators.required],
@@ -52,6 +59,8 @@ export class ListcommentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.idUser = this.tokenservice._idUser();
+    this.isAdmin = this.tokenservice.isAdmin();
     this.idPost = this.activatedroute.snapshot.queryParamMap.get('idPost');
     console.log(this.idPost);
     if (this.idPost) {
@@ -137,5 +146,64 @@ export class ListcommentsComponent implements OnInit {
       }
     });
   }
+
+  deleteComment(idComment: number) {
+    this.commentservice.deleteComment(idComment).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error(error); // Affiche l'erreur dans la console
+        return throwError(error); // Passe l'erreur à la fonction appelante$
+
+      })
+    ).subscribe(
+      data => {
+        console.log(data);
+        if (this.idPost) {
+          this.commentservice.getComments(parseInt(this.idPost)).subscribe(
+            (data) => {
+              console.log(data),
+                this.comments = data,
+                this.commentsWithUser = [],
+                this.comments.forEach(comment => {
+                  if (comment.idUser !== undefined) {
+                    this.userservice.getUserById(comment.idUser).subscribe(
+                      user => {
+                        this.commentsWithUser.push({ ...comment, user });
+                        this.OrderMessage()
+                      }
+                    )
+                  }
+
+                });
+            },
+            err => {
+              console.log(err);
+            }
+          );
+
+          this.postservice.getPostById(parseInt(this.idPost)).subscribe(
+            data => {
+              this.post = data;
+            },
+            err => {
+              console.log(err)
+            }
+          )
+        }
+
+
+      }
+    )
+  }
+
+  logoutUser() {
+    this.tokenservice.logout();
+    this.router.navigate(['']);
+  }
+
+  onReturnPost() {
+    this.router.navigate(['post/'], { queryParams: { idCourse: this.post.idCourse } });
+  }
+
+
 
 }

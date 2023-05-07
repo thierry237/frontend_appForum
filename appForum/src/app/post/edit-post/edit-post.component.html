@@ -20,9 +20,10 @@
                             <div class="form_errors" *ngIf="message.errors && f.submitted">contenu requis</div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-40 mb-3 me-2">Valider</button>
-                        <button type="button" (click)="onReturnPost()"
-                            class="btn btn-danger w-40 mb-3 ml-3  ">annuler</button>
+                        <button type="submit" class="btn btn-primary w-40 mb-3 me-2"><i
+                                class="bi bi-plus-circle-fill"></i> Valider</button>
+                        <button type="button" (click)="onReturnPost()" class="btn btn-danger w-40 mb-3 ml-3  "> <i
+                                class="bi bi-x-circle-fill"></i>annuler</button>
                         <hr class="my-4">
 
                         <!-- Message de confirmation d'inscription -->

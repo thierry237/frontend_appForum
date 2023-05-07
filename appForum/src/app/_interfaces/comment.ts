@@ -3,6 +3,7 @@ export interface IComment {
     comment: string,
     like?: boolean,
     idUser?: number,
-    idPost?: number
+    idPost?: number,
     createdAt?: string
+
 }

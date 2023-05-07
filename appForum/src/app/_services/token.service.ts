@@ -56,5 +56,9 @@ export class TokenService {
     return this.decodedToken.username
   }
 
+  logout() {
+    localStorage.removeItem('token');
+  }
+
 
 }

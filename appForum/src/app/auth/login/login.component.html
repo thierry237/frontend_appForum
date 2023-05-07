@@ -6,14 +6,15 @@
                     <h2 class="text-center mb-4">{{title}}</h2>
                     <form name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit()">
                         <div class="mb-3">
-                            <label for="email" class="form-label">Adresse e-mail</label>
+                            <label for="email" class="form-label"><i class="bi bi-person-plus-fill"></i> Adresse
+                                e-mail</label>
                             <input type="email" name="email" class="form-control" id="email" [(ngModel)]="form.email"
                                 #email="ngModel" placeholder="thierry@gmail.com" required>
                             <div class="form_errors" *ngIf="email_error && f.submitted">email n'exite pas </div>
                             <div class="form_errors" *ngIf="email.errors && f.submitted">adresse e-mail requise</div>
                         </div>
                         <div class="mb-3">
-                            <label for="password" class="form-label">Mot de passe</label>
+                            <label for="password" class="form-label"><i class="bi bi-key-fill"></i> Mot de passe</label>
                             <input type="password" name="password" class="form-control" id="password"
                                 [(ngModel)]="form.password" #password="ngModel" placeholder="min 3 et max 15" required
                                 minlength="3" maxlength="15" (keyup)="clearPasswordError()">
@@ -27,7 +28,7 @@
                         </div>
                         <button type="submit" class="btn btn-primary w-100 mb-3">Connexion</button>
                         <div class="d-flex justify-content-center">
-                            <a href="#" class="link-primary">Mot de passe oublié ?</a>
+                            <a class="link-primary">Mot de passe oublié ?</a>
                         </div>
                         <hr class="my-4">
                         <p class="text-center">Nouveau sur appForum ?</p>
