@@ -16,7 +16,7 @@ import { UserService } from 'src/app/_services/user.service';
 })
 export class GetCourseComponent implements OnInit {
   isAdmin: boolean = false;
-  username: string = 'admin';
+  username: string = '';
   message_error!: string | null;
   searchCourse: string = '';
   message: string = '';
@@ -26,7 +26,7 @@ export class GetCourseComponent implements OnInit {
   decodedToken: ITokenPayload = {
     idUser: 0,
     isAdmin: false,
-    username: 'admin',
+    username: '',
     iat: 1,
     exp: 2
   }
@@ -67,7 +67,7 @@ export class GetCourseComponent implements OnInit {
 
 
           if (errorMessage == "Unauthorized") {
-            this.message_error = "Veuillez vous reconnecter de nouveau";
+            this.message_error = "Session terminée! veuillez vous reconnecter de nouveau";
             console.log(this.message_error)
           }
         }
@@ -84,7 +84,13 @@ export class GetCourseComponent implements OnInit {
 
 
   deleteCourse(idCourse: number) {
-    this.courseservice.deleteCourse(idCourse).subscribe(
+    this.courseservice.deleteCourse(idCourse).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error(error); // Affiche l'erreur dans la console
+        return throwError(error); // Passe l'erreur à la fonction appelante$
+
+      })
+    ).subscribe(
       (data) => {
         console.log(data),
           this.courseservice.getListCourses().subscribe(
@@ -97,8 +103,20 @@ export class GetCourseComponent implements OnInit {
             }
           )
       },
-      err => {
-        console.log(err)
+      (error: HttpErrorResponse) => {
+        if (error && error.error && error.error.message) {
+          const errorMessage: string = error.error.message;
+
+
+          if (errorMessage == "Unauthorized") {
+            this.message_error = "Session terminée! veuillez vous reconnecter de nouveau";
+            console.log(this.message_error)
+          }
+
+          if (errorMessage == "Course not found") {
+            this.message_error = "Aucun cours trouvé";
+          }
+        }
       }
     )
   }
@@ -141,7 +159,7 @@ export class GetCourseComponent implements OnInit {
 
 
             if (errorMessage == "Unauthorized") {
-              this.message_error = "Veuillez vous reconnecter de nouveau";
+              this.message_error = "Session terminée! veuillez vous reconnecter de nouveau";
               console.log(this.message_error)
             }
           }

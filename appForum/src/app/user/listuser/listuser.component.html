@@ -1,4 +1,5 @@
-<section class="container">
+<h6 *ngIf="message_auth">{{message_auth}} <a [routerLink]="['/login']">connexion</a></h6>
+<section class="container" *ngIf="!message_auth">
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand text-arial">AppForum</a>
@@ -13,17 +14,30 @@
                         <a class="nav-link text-primary"> <i class="bi bi-house-add-fill"></i>Accueil</a>
                     </li>
                 </ul>
+                <label>Rechercher un utilisateur :</label>
                 <form class="form-inline my-2 my-lg-0 mx-auto">
                     <div class="d-flex">
                         <div class="form-group mx-2">
-                            <input type="text" class="form-control" id="search- " placeholder="Recherche"
+                            <input type="text" class="form-control" id="search- "
+                                placeholder="Recherche un utilisateur..." name="searchCourse">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm mr-3"><i class="bi bi-search"></i></button>
+                    </div>
+
+                </form>
+                <label>Utilisateurs d'un cours :</label>
+                <form class="form-inline my-2 my-lg-0 mx-auto">
+                    <div class="d-flex">
+                        <div class="form-group mx-2">
+                            <input type="text" class="form-control" id="search- " placeholder="Recherche...d'un cours"
                                 name="searchCourse">
                         </div>
                         <button type="submit" class="btn btn-primary btn-sm mr-3"><i class="bi bi-search"></i></button>
                     </div>
+
                 </form>
                 <div class="d-flex">
-                    <button class="btn btn-danger" (click)="logoutUser"><i class="bi bi-person-x-fill"></i></button>
+                    <button class="btn btn-danger" (click)="logoutUser()"><i class="bi bi-person-x-fill"></i></button>
                 </div>
             </div>
         </div>
@@ -34,8 +48,10 @@
             <div class="card-deck">
                 <div *ngFor="let user of users" class="card mt-3">
                     <div class="card-body d-flex justify-content-between">
-                        <p class="card-text"><i class="bi bi-person-vcard"></i> Nom & Prénom: {{user.lastname}}
-                            {{user.firstname}}</p>
+                        <p class="card-text"><i class="bi bi-person-vcard"></i>
+                            <small class="text-muted">Nom & Prénom:</small> {{user.lastname}}
+                            {{user.firstname}}
+                        </p>
 
                     </div>
                     <div class="card-footer">

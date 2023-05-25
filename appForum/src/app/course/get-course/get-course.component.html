@@ -1,4 +1,4 @@
-<h4 *ngIf="message_error">{{message_error}} <a [routerLink]="['/login']">connexion</a></h4>
+<h6 *ngIf="message_error">{{message_error}} <a [routerLink]="['/login']">connexion</a></h6>
 <section class="container" *ngIf="!message_error">
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
         <div class="container-fluid">
@@ -18,7 +18,7 @@
                         <a class="nav-link text-primary" [routerLink]="['/user']"> <i
                                 class="bi bi-person-lines-fill"></i>utilisateurs</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" *ngIf="isAdmin">
                         <a class="nav-link text-primary" [routerLink]="['add']"> <i
                                 class="bi bi-plus-circle-fill"></i>Ajouter un
                             cours</a>
@@ -45,7 +45,6 @@
     <h4 class="text-arial">Bienvenue {{username}}!</h4>
     <hr>
     <div class="card-deck row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-5 g-3">
-        <h3 *ngIf="message">{{message}}</h3>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let course of courses">
             <div class="card mb-4 h-100">
                 <div class="card-body">

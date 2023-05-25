@@ -1,5 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
 import { IPost } from 'src/app/_interfaces/post';
 import { PostService } from 'src/app/_services/post.service';
 
@@ -10,6 +12,7 @@ import { PostService } from 'src/app/_services/post.service';
 })
 export class EditPostComponent implements OnInit {
   modificationValide: boolean = false;
+  message_auth!: string | null;
   post: IPost = {
     title: '',
     message: ''
@@ -20,12 +23,26 @@ export class EditPostComponent implements OnInit {
 
   ngOnInit(): void {
     const idPost = this.activatedroute.snapshot.params['id'];
-    this.postservice.getPostById(idPost).subscribe(
+    this.postservice.getPostById(idPost).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error(error); // Affiche l'erreur dans la console
+        return throwError(error); // Passe l'erreur à la fonction appelante$
+
+      })
+    ).subscribe(
       data => {
         this.post = data
       },
-      err => {
-        console.log(err)
+      (error: HttpErrorResponse) => {
+        if (error && error.error && error.error.message) {
+          const errorMessage: string = error.error.message;
+
+
+          if (errorMessage == "Unauthorized") {
+            this.message_auth = "Session terminée! veuillez vous reconnecter de nouveau";
+            console.log(this.message_auth)
+          }
+        }
       }
     )
   }
@@ -45,7 +62,4 @@ export class EditPostComponent implements OnInit {
   onReturnPost() {
     this.router.navigate(['/post'], { queryParams: { idCourse: this.post.idCourse } });
   }
-
-
-
 }

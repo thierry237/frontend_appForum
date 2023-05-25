@@ -12,6 +12,8 @@ export class CommentService {
   baseUrl: string = 'http://localhost:8000'
   constructor(private http: HttpClient) { }
 
+
+
   getComments(idPost: number): Observable<IComment[]> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -36,6 +38,7 @@ export class CommentService {
     return this.http.delete<any>(this.baseUrl + '/comment/' + idComment, { "headers": headers })
   }
 
+
   getCommentById(idComment: number): Observable<IComment> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -43,6 +46,7 @@ export class CommentService {
     })
     return this.http.get<IComment>(this.baseUrl + '/comment/' + idComment, { "headers": headers })
   }
+
 
   editComment(comment: IComment): Observable<any> {
     const headers = new HttpHeaders({

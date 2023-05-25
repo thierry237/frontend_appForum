@@ -1,6 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
 import { IPost } from 'src/app/_interfaces/post';
+import { CourseService } from 'src/app/_services/course.service';
 import { PostService } from 'src/app/_services/post.service';
 
 @Component({
@@ -11,18 +14,46 @@ import { PostService } from 'src/app/_services/post.service';
 export class AddPostComponent implements OnInit {
   idCourse!: string | null;
   ajoutValide: boolean = false;
+  message_auth!: string | null;
   post: IPost = {
     title: '',
     message: ''
   }
   constructor(private postservice: PostService,
     private activatedroute: ActivatedRoute,
+    private courseservice: CourseService,
     private router: Router) { }
+
   ngOnInit(): void {
     this.idCourse = this.activatedroute.snapshot.queryParamMap.get('idCourse')
     if (this.idCourse)
       this.post.idCourse = parseInt(this.idCourse)
 
+    if (this.idCourse)
+      this.courseservice.getCourseById(parseInt(this.idCourse)).pipe(
+        catchError((error: HttpErrorResponse) => {
+          console.error(error); // Affiche l'erreur dans la console
+          return throwError(error); // Passe l'erreur à la fonction appelante$
+
+        })
+      ).subscribe(
+        data => {
+          if (!data) {
+            this.router.navigate(['/course']);
+          }
+        },
+        (error: HttpErrorResponse) => {
+          if (error && error.error && error.error.message) {
+            const errorMessage: string = error.error.message;
+
+
+            if (errorMessage == "Unauthorized") {
+              this.message_auth = "Session terminée! veuillez vous reconnecter de nouveau";
+              console.log(this.message_auth)
+            }
+          }
+        }
+      )
   }
 
   onSubmit() {

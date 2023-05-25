@@ -11,6 +11,7 @@ import { CourseService } from 'src/app/_services/course.service';
 })
 export class AddCourseComponent implements OnInit {
   message_error!: string | null;
+  message_auth!: string | null;
   ajoutValide: boolean = false;
   course: ICourse = {
     name: '',
@@ -44,15 +45,13 @@ export class AddCourseComponent implements OnInit {
           if (errorMessage == "course already exists") {
             this.message_error = "Ce cours existe déjà";
           }
-          // if (errorMessage == "Unauthorized") {
-          //   this.message_error = "Veuillez vous reconnecter de nouveau";
-          //   console.log(this.message_error)
-          // }
+          if (errorMessage == "Unauthorized") {
+            this.message_auth = "Veuillez vous reconnecter de nouveau";
+            console.log(this.message_error)
+          }
         }
       }
     )
 
   }
-
-
 }

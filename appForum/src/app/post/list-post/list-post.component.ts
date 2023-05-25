@@ -8,6 +8,8 @@ import { PostService } from 'src/app/_services/post.service';
 import { UserService } from 'src/app/_services/user.service';
 import { IUser } from 'src/app/_interfaces/user';
 import { TokenService } from 'src/app/_services/token.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-list-post',
@@ -18,6 +20,7 @@ export class ListPostComponent implements OnInit {
   idCourse!: string | null;
   isAdmin: boolean = false;
   idUser !: number;
+  message_error!: string | null;
 
   posts: IPost[] = [];
   postsWithUser: any[] = [];
@@ -51,10 +54,15 @@ export class ListPostComponent implements OnInit {
     this.isAdmin = this.tokenservice.isAdmin();
     this.idCourse = this.activatedroute.snapshot.queryParamMap.get('idCourse')
     if (this.idCourse) {
-      this.postservice.getListPostCourse(parseInt(this.idCourse)).subscribe(
+      this.postservice.getListPostCourse(parseInt(this.idCourse)).pipe(
+        catchError((error: HttpErrorResponse) => {
+          console.error(error); // Affiche l'erreur dans la console
+          return throwError(error); // Passe l'erreur à la fonction appelante$
+
+        })
+      ).subscribe(
         (data) => {
-          console.log(data),
-            this.posts = data,
+          this.posts = data,
             this.posts.forEach(post => {
               if (post.idUser !== undefined) {
                 this.userservice.getUserById(post.idUser).subscribe(
@@ -67,8 +75,16 @@ export class ListPostComponent implements OnInit {
 
             })
         },
-        err => {
-          console.log(err)
+        (error: HttpErrorResponse) => {
+          if (error && error.error && error.error.message) {
+            const errorMessage: string = error.error.message;
+
+
+            if (errorMessage == "Unauthorized") {
+              this.message_error = "Session terminée! veuillez vous reconnecter de nouveau";
+              console.log(this.message_error)
+            }
+          }
         }
       )
 
@@ -93,6 +109,7 @@ export class ListPostComponent implements OnInit {
   deletePost(idPost: number) {
     this.postservice.deletePost(idPost).subscribe(
       data => {
+        console.log(data);
         if (this.idCourse) {
           this.postservice.getListPostCourse(parseInt(this.idCourse)).subscribe(
             (data) => {

@@ -2,3 +2,7 @@
     color: red;
     font-size: 12px;
 }
+
+.alert-link:hover {
+    cursor: pointer;
+}

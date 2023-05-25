@@ -1,5 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
 import { IUser } from 'src/app/_interfaces/user';
 import { TokenService } from 'src/app/_services/token.service';
 import { UserService } from 'src/app/_services/user.service';
@@ -12,6 +14,7 @@ import { UserService } from 'src/app/_services/user.service';
 export class ListuserComponent implements OnInit {
   users: IUser[] = [];
   isAdmin!: boolean;
+  message_auth!: string | null;
   user: IUser = {
     lastname: '',
     firstname: '',
@@ -28,12 +31,28 @@ export class ListuserComponent implements OnInit {
   ) { }
   ngOnInit(): void {
     this.isAdmin = this.tokenservice.isAdmin();
-    this.userservice.getAllUsers().subscribe(
+    this.userservice.getAllUsers().pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error(error); // Affiche l'erreur dans la console
+        return throwError(error); // Passe l'erreur à la fonction appelante$
+
+      })
+    ).subscribe(
       data => {
         this.users = data;
         console.log(this.users)
       },
-      err => console.log(err)
+      (error: HttpErrorResponse) => {
+        if (error && error.error && error.error.message) {
+          const errorMessage: string = error.error.message;
+
+
+          if (errorMessage == "Unauthorized") {
+            this.message_auth = "Session terminée! veuillez vous reconnecter de nouveau";
+            console.log(this.message_auth)
+          }
+        }
+      }
 
     )
   }
@@ -80,5 +99,6 @@ export class ListuserComponent implements OnInit {
     this.tokenservice.logout();
     this.router.navigate(['']);
   }
+
 
 }

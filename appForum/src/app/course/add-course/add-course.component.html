@@ -1,5 +1,5 @@
-<h4 *ngIf="message_error">{{message_error}} <a [routerLink]="['/login']">connexion</a></h4>
-<div class="container mt-5" *ngIf="!message_error">
+<h4 *ngIf="message_auth">{{message_auth}} <a [routerLink]="['/login']">connexion</a></h4>
+<div class="container mt-5" *ngIf="!message_auth">
     <div class="row justify-content-center">
         <div class="col-md-5">
             <div class="card shadow-lg">

@@ -12,6 +12,7 @@ import { CourseService } from 'src/app/_services/course.service';
 })
 export class UpdateCourseComponent implements OnInit {
   message_error!: string | null;
+  message_auth!: string | null;
   modificationValide: boolean = false;
 
   course: ICourse = {
@@ -59,6 +60,11 @@ export class UpdateCourseComponent implements OnInit {
           console.log(errorMessage);
           if (errorMessage == "course already exists") {
             this.message_error = "Ce cours existe déjà";
+          }
+
+          if (errorMessage == "Unauthorized") {
+            this.message_auth = "Session terminée! veuillez vous reconnecter de nouveau";
+            console.log(this.message_error)
           }
         }
       }
