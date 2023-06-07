@@ -1,4 +1,5 @@
-<div class="container">
+<h6 *ngIf="message_error">{{message_error}} <a [routerLink]="['/login']">connexion</a></h6>
+<div class="container" *ngIf="!message_error">
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand text-arial">AppForum</a>
@@ -62,7 +63,6 @@
         </div>
     </form>
     <hr>
-    <h6 *ngIf="commentsWithUser.length==0">Aucun commentaire disponible</h6>
     <div class="row comments-container">
         <div class="col-12">
             <div class="card-deck">

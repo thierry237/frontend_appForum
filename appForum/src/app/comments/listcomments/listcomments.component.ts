@@ -20,6 +20,7 @@ import { TokenService } from 'src/app/_services/token.service';
 export class ListcommentsComponent implements OnInit {
   idPost: string | null = null;
   commentAdded: boolean = false;
+  message_error!: string | null;
   isAdmin: boolean = false;
   idUser !: number;
   commentsWithUser: any[] = [];
@@ -64,7 +65,13 @@ export class ListcommentsComponent implements OnInit {
     this.idPost = this.activatedroute.snapshot.queryParamMap.get('idPost');
     console.log(this.idPost);
     if (this.idPost) {
-      this.commentservice.getComments(parseInt(this.idPost)).subscribe(
+      this.commentservice.getComments(parseInt(this.idPost)).pipe(
+        catchError((error: HttpErrorResponse) => {
+          console.error(error); // Affiche l'erreur dans la console
+          return throwError(error); // Passe l'erreur à la fonction appelante$
+
+        })
+      ).subscribe(
         (data) => {
           console.log(data),
             this.comments = data,
@@ -81,8 +88,16 @@ export class ListcommentsComponent implements OnInit {
             });
 
         },
-        err => {
-          console.log(err);
+        (error: HttpErrorResponse) => {
+          if (error && error.error && error.error.message) {
+            const errorMessage: string = error.error.message;
+
+
+            if (errorMessage == "Unauthorized") {
+              this.message_error = "Session terminée! veuillez vous reconnecter de nouveau";
+              console.log(this.message_error)
+            }
+          }
         }
       );
 
@@ -115,10 +130,27 @@ export class ListcommentsComponent implements OnInit {
           .subscribe((comment: IComment) => {
             const newComment = { ...comment };
             if (newComment.idUser !== undefined) {
-              this.userservice.getUserById(newComment.idUser).subscribe(
+              this.userservice.getUserById(newComment.idUser).pipe(
+                catchError((error: HttpErrorResponse) => {
+                  console.error(error); // Affiche l'erreur dans la console
+                  return throwError(error); // Passe l'erreur à la fonction appelante$
+
+                })
+              ).subscribe(
                 user => {
                   this.commentsWithUser.push({ ...newComment, user });
                   this.OrderMessage()
+                },
+                (error: HttpErrorResponse) => {
+                  if (error && error.error && error.error.message) {
+                    const errorMessage: string = error.error.message;
+
+
+                    if (errorMessage == "Unauthorized") {
+                      this.message_error = "Session terminée! veuillez vous reconnecter de nouveau";
+                      console.log(this.message_error)
+                    }
+                  }
                 }
               );
             } else {

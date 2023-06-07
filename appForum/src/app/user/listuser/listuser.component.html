@@ -14,25 +14,15 @@
                         <a class="nav-link text-primary"> <i class="bi bi-house-add-fill"></i>Accueil</a>
                     </li>
                 </ul>
-                <label>Rechercher un utilisateur :</label>
                 <form class="form-inline my-2 my-lg-0 mx-auto">
                     <div class="d-flex">
                         <div class="form-group mx-2">
                             <input type="text" class="form-control" id="search- "
-                                placeholder="Recherche un utilisateur..." name="searchCourse">
+                                placeholder="Recherche un utilisateur..." name="searchUser" [(ngModel)]="searchUser"
+                                (ngModelChange)="onSearchChange()">
                         </div>
-                        <button type="submit" class="btn btn-primary btn-sm mr-3"><i class="bi bi-search"></i></button>
-                    </div>
-
-                </form>
-                <label>Utilisateurs d'un cours :</label>
-                <form class="form-inline my-2 my-lg-0 mx-auto">
-                    <div class="d-flex">
-                        <div class="form-group mx-2">
-                            <input type="text" class="form-control" id="search- " placeholder="Recherche...d'un cours"
-                                name="searchCourse">
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-sm mr-3"><i class="bi bi-search"></i></button>
+                        <button type="submit" class="btn btn-primary btn-sm mr-3"><i class="bi bi-search"
+                                (click)="searchUserAPI()"></i></button>
                     </div>
 
                 </form>
